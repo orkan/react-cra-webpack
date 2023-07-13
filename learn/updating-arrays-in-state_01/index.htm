@@ -1,0 +1,88 @@
+<!-- https://react.dev/learn/updating-arrays-in-state#remove-an-item-from-the-shopping-cart -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link rel="stylesheet" href="../styles.css" />
+    <style>
+      button {
+        display: inline-block;
+        margin: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+      /*
+       * ======================================================================
+       * App.js
+       */
+      const initialProducts = [
+        {
+          id: 0,
+          name: "Baklava",
+          count: 1,
+        },
+        {
+          id: 1,
+          name: "Cheese",
+          count: 5,
+        },
+        {
+          id: 2,
+          name: "Spaghetti",
+          count: 2,
+        },
+      ];
+
+      function ShoppingCart() {
+        const [products, setProducts] = React.useState(initialProducts);
+
+        function handleClick(productId, vote) {
+          setProducts(
+            products.map((o) => {
+              if (o.id === productId) {
+                o.count += vote;
+              }
+              return o;
+            })
+          );
+        }
+
+        return (
+          <ul>
+            {products.map((product) => {
+              if (product.count > 0) {
+                return (
+                  <li key={product.id}>
+                    {product.name} (<b>{product.count}</b>)
+                    <button onClick={() => handleClick(product.id, 1)}>
+                      +
+                    </button>
+                    <button onClick={() => handleClick(product.id, -1)}>
+                      –
+                    </button>
+                  </li>
+                );
+              }
+            })}
+          </ul>
+        );
+      }
+
+      function App() {
+        return <ShoppingCart />;
+      }
+
+      /*
+       * ======================================================================
+       * index.js
+       */
+      ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+    </script>
+  </body>
+</html>
