@@ -5,13 +5,13 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "1. Run server",
       "command": "npm start",
-      "name": "npm start",
       "request": "launch",
       "type": "node-terminal"
     },
     {
-      "name": "Chrome",
+      "name": "2. Debug in Chrome",
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:3000",
