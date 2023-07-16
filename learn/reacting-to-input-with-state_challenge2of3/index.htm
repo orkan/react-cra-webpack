@@ -1,0 +1,96 @@
+<!-- https://react.dev/learn/reacting-to-input-with-state#profile-editor -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link rel="stylesheet" href="../styles.css" />
+    <style>
+      label {
+        display: block;
+        margin-bottom: 20px;
+      }
+    </style>
+    <title>Profile editor</title>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+      /*
+       * ======================================================================
+       * Components.js
+       */
+      function ProfileEditor({ editing = false, profile }) {
+        const [edit, setEdit] = React.useState(editing);
+        const [data, setData] = React.useState(profile);
+
+        function handleEditFirst(e) {
+          setData({ ...data, first: e.target.value });
+        }
+        function handleEditLast(e) {
+          setData({ ...data, last: e.target.value });
+        }
+
+        return (
+          <form>
+            <label>
+              First name:
+              {edit ? (
+                <input value={data.first} onChange={handleEditFirst} />
+              ) : (
+                <b>{data.first}</b>
+              )}
+            </label>
+            <label>
+              Last name:
+              {edit ? (
+                <input value={data.last} onChange={handleEditLast} />
+              ) : (
+                <b>{data.last}</b>
+              )}
+            </label>
+            <button
+              type="submit"
+              onClick={(e) => {
+                e.preventDefault();
+                setEdit(!edit);
+              }}
+            >
+              {edit ? "Save" : "Edit"} Profile
+            </button>
+            <p>
+              <i>
+                Hello, {data.first} {data.last}!
+              </i>
+            </p>
+          </form>
+        );
+      }
+
+      /*
+       * ======================================================================
+       * App.js
+       */
+      function App() {
+        return (
+          <ProfileEditor
+            editing={true}
+            profile={{ first: "Jane", last: "Jacobs" }}
+          />
+        );
+      }
+
+      /*
+       * ======================================================================
+       * index.js
+       */
+      ReactDOM.createRoot(document.getElementById("root")).render(
+        <React.StrictMode>
+          <App />
+        </React.StrictMode>
+      );
+    </script>
+  </body>
+</html>
