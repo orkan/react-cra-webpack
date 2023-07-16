@@ -25,6 +25,7 @@
       function ProfileEditor({ editing = false, profile }) {
         const [edit, setEdit] = React.useState(editing);
         const [data, setData] = React.useState(profile);
+        const [note, setNote] = React.useState("");
 
         /**
          * Shared edit input handler.
@@ -64,6 +65,18 @@
                 />
               ) : (
                 <b>{data.last}</b>
+              )}
+            </label>
+            <label>
+              Notes:
+              {edit ? (
+                <input
+                  name="note"
+                  value={note}
+                  onChange={(e) => setNote(e.target.value)}
+                />
+              ) : (
+                <b>{note}</b>
               )}
             </label>
             <button
