@@ -26,11 +26,22 @@
         const [edit, setEdit] = React.useState(editing);
         const [data, setData] = React.useState(profile);
 
-        function handleEditFirst(e) {
-          setData({ ...data, first: e.target.value });
+        /**
+         * Shared edit input handler.
+         */
+        function handleEdit(e) {
+          setData({ ...data, [e.target.name]: e.target.value });
         }
-        function handleEditLast(e) {
-          setData({ ...data, last: e.target.value });
+
+        /**
+         * Pass additional args to event handler.
+         * @link https://stackoverflow.com/questions/50350202/when-to-use-inline-function-on-button-onclick-event-javascript-react-js
+         *
+         * CAUTION:
+         * Anonymouse event handlers are (re)created by JS engine on each React render!
+         */
+        function handleEditArgs(arg1, arg2, e) {
+          setData({ ...data, [arg1]: `${e.target.value}[${arg2}]` });
         }
 
         return (
@@ -38,7 +49,7 @@
             <label>
               First name:
               {edit ? (
-                <input value={data.first} onChange={handleEditFirst} />
+                <input name="first" value={data.first} onChange={handleEdit} />
               ) : (
                 <b>{data.first}</b>
               )}
@@ -46,7 +57,11 @@
             <label>
               Last name:
               {edit ? (
-                <input value={data.last} onChange={handleEditLast} />
+                <input
+                  name="last"
+                  value={data.last}
+                  onChange={handleEditArgs.bind(this, "last", "Arg-2")}
+                />
               ) : (
                 <b>{data.last}</b>
               )}
