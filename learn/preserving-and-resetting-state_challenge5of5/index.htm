@@ -1,0 +1,95 @@
+<!-- https://react.dev/learn/preserving-and-resetting-state#fix-misplaced-state-in-the-list -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link rel="stylesheet" href="../styles.css" />
+    <style></style>
+    <title>Fix disappearing input text</title>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+      /*
+       * ======================================================================
+       * Components.js
+       */
+      function Contact({ contact }) {
+        const [expanded, setExpanded] = React.useState(false);
+        return (
+          <>
+            <p>
+              <b>{contact.name}</b>
+            </p>
+            {expanded && (
+              <p>
+                <i>{contact.email}</i>
+              </p>
+            )}
+            <button
+              onClick={() => {
+                setExpanded(!expanded);
+              }}
+            >
+              {expanded ? "Hide" : "Show"} email
+            </button>
+          </>
+        );
+      }
+
+      /*
+       * ======================================================================
+       * App.js
+       */
+      const contacts = [
+        { id: 0, name: "Alice", email: "alice@mail.com" },
+        { id: 1, name: "Bob", email: "bob@mail.com" },
+        { id: 2, name: "Taylor", email: "taylor@mail.com" },
+      ];
+
+      function App() {
+        const [reverse, setReverse] = React.useState(false);
+
+        const displayedContacts = [...contacts];
+        if (reverse) {
+          displayedContacts.reverse();
+        }
+
+        return (
+          <>
+            <label>
+              <input
+                type="checkbox"
+                value={reverse}
+                onChange={(e) => {
+                  setReverse(e.target.checked);
+                }}
+              />{" "}
+              Show in reverse order
+            </label>
+            <ul>
+              {displayedContacts.map((contact, i) => (
+                <li key={i}>
+                  <Contact contact={contact} />
+                </li>
+              ))}
+            </ul>
+          </>
+        );
+      }
+
+      /*
+       * ======================================================================
+       * index.js
+       */
+      ReactDOM.createRoot(document.getElementById("root")).render(
+        <React.StrictMode>
+          <App />
+        </React.StrictMode>
+      );
+    </script>
+  </body>
+</html>
