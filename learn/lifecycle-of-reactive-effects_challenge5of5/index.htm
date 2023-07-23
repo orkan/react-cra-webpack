@@ -17,46 +17,14 @@
       App.js 
     -->
     <script type="module">
-      import { fetchData } from "./api.js";
-      window.fetchData = fetchData;
+      import { useFetchData } from "./hooks.js";
+      window.useFetchData = useFetchData;
     </script>
 
     <script type="text/babel">
       function App() {
-        const [planetList, setPlanetList] = React.useState([]);
-        const [planetId, setPlanetId] = React.useState("");
-
-        const [placeList, setPlaceList] = React.useState([]);
-        const [placeId, setPlaceId] = React.useState("");
-
-        React.useEffect(() => {
-          let ignore = false;
-          fetchData("/planets").then((result) => {
-            if (!ignore) {
-              console.log("Fetched a list of planets.");
-              setPlanetList(result);
-              setPlanetId(result[0].id); // Select the first planet
-            }
-          });
-          return () => {
-            ignore = true;
-          };
-        }, []);
-
-        React.useEffect(() => {
-          let ignore = false;
-          planetId &&
-            fetchData("/planets/" + planetId + "/places").then((result) => {
-              if (!ignore) {
-                console.log("Fetched a list of places.");
-                setPlaceList(result);
-                setPlaceId(result[0].id); // Select the first place
-              }
-            });
-          return () => {
-            ignore = true;
-          };
-        }, [planetId]);
+        const [planetList, planetId, setPlanetId] = useFetchData();
+        const [placeList, placeId, setPlaceId] = useFetchData(planetId);
 
         return (
           <>
