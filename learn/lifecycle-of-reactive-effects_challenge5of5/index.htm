@@ -1,0 +1,97 @@
+<!-- https://react.dev/learn/lifecycle-of-reactive-effects#populate-a-chain-of-select-boxes -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link rel="stylesheet" href="styles.css" />
+    <style></style>
+    <title>Populate a chain of select boxes</title>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <!-- 
+      =========================================================================
+      App.js 
+    -->
+    <script type="module">
+      import { fetchData } from "./api.js";
+      window.fetchData = fetchData;
+    </script>
+
+    <script type="text/babel">
+      function App() {
+        const [planetList, setPlanetList] = React.useState([]);
+        const [planetId, setPlanetId] = React.useState("");
+
+        const [placeList, setPlaceList] = React.useState([]);
+        const [placeId, setPlaceId] = React.useState("");
+
+        React.useEffect(() => {
+          let ignore = false;
+          fetchData("/planets").then((result) => {
+            if (!ignore) {
+              console.log("Fetched a list of planets.");
+              setPlanetList(result);
+              setPlanetId(result[0].id); // Select the first planet
+            }
+          });
+          return () => {
+            ignore = true;
+          };
+        }, []);
+
+        return (
+          <>
+            <label>
+              Pick a planet:{" "}
+              <select
+                value={planetId}
+                onChange={(e) => {
+                  setPlanetId(e.target.value);
+                }}
+              >
+                {planetList.map((planet) => (
+                  <option key={planet.id} value={planet.id}>
+                    {planet.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label>
+              Pick a place:{" "}
+              <select
+                value={placeId}
+                onChange={(e) => {
+                  setPlaceId(e.target.value);
+                }}
+              >
+                {placeList.map((place) => (
+                  <option key={place.id} value={place.id}>
+                    {place.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <hr />
+            <p>
+              You are going to: {placeId || "???"} on {planetId || "???"}{" "}
+            </p>
+          </>
+        );
+      }
+
+      /*
+       * ======================================================================
+       * index.js
+       */
+      ReactDOM.createRoot(document.getElementById("root")).render(
+        <React.StrictMode>
+          <App />
+        </React.StrictMode>
+      );
+    </script>
+  </body>
+</html>
