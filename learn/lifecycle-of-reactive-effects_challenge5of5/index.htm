@@ -1,0 +1,87 @@
+<!-- https://react.dev/learn/lifecycle-of-reactive-effects#populate-a-chain-of-select-boxes -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link rel="stylesheet" href="styles.css" />
+    <style></style>
+    <title>Populate a chain of select boxes</title>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <!-- 
+      =========================================================================
+      App.js 
+    -->
+    <script type="module">
+      import { useFetchData } from "./hooks.js";
+      window.useFetchData = useFetchData;
+    </script>
+
+    <script type="text/babel">
+      function App() {
+        const [planetList, planetId, setPlanetId] = useFetchData("/planets");
+        const [placeList, placeId, setPlaceId] = useFetchData(
+          `/planets/${planetId}/places`
+        );
+
+        return (
+          <>
+            <label>
+              Pick a planet:{" "}
+              <select
+                value={planetId}
+                onChange={(e) => {
+                  setPlanetId(e.target.value);
+                  setPlaceId("");
+                }}
+              >
+                {planetList.map((planet) => (
+                  <option key={planet.id} value={planet.id}>
+                    {planet.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label>
+              Pick a place:{" "}
+              <select
+                value={placeId}
+                onChange={(e) => {
+                  setPlaceId(e.target.value);
+                }}
+              >
+                {placeId ? (
+                  placeList.map((place) => (
+                    <option key={place.id} value={place.id}>
+                      {place.name}
+                    </option>
+                  ))
+                ) : (
+                  <option>loading...</option>
+                )}
+              </select>
+            </label>
+            <hr />
+            <p>
+              You are going to: {placeId || "???"} on {planetId || "???"}{" "}
+            </p>
+          </>
+        );
+      }
+
+      /*
+       * ======================================================================
+       * index.js
+       */
+      ReactDOM.createRoot(document.getElementById("root")).render(
+        // <React.StrictMode>
+        <App />
+        // </React.StrictMode>
+      );
+    </script>
+  </body>
+</html>
