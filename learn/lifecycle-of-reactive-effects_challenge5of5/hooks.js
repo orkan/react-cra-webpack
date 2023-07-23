@@ -1,10 +1,8 @@
 import { fetchData } from "./api.js";
 
-export function useFetchData(placeId = "") {
+export function useFetchData(url) {
   const [list, setList] = React.useState([]);
   const [id, setId] = React.useState("");
-
-  const url = placeId ? `/planets/${placeId}/places` : "/planets";
 
   React.useEffect(() => {
     let ignore = false;
@@ -18,7 +16,7 @@ export function useFetchData(placeId = "") {
         }
       });
     } catch (error) {
-      console.log(error);
+      id && console.log(error);
     }
 
     return () => {

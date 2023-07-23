@@ -23,8 +23,10 @@
 
     <script type="text/babel">
       function App() {
-        const [planetList, planetId, setPlanetId] = useFetchData();
-        const [placeList, placeId, setPlaceId] = useFetchData(planetId);
+        const [planetList, planetId, setPlanetId] = useFetchData("/planets");
+        const [placeList, placeId, setPlaceId] = useFetchData(
+          `/planets/${planetId}/places`
+        );
 
         return (
           <>
@@ -52,11 +54,15 @@
                   setPlaceId(e.target.value);
                 }}
               >
-                {placeList.map((place) => (
-                  <option key={place.id} value={place.id}>
-                    {place.name}
-                  </option>
-                ))}
+                {placeId ? (
+                  placeList.map((place) => (
+                    <option key={place.id} value={place.id}>
+                      {place.name}
+                    </option>
+                  ))
+                ) : (
+                  <option>loading...</option>
+                )}
               </select>
             </label>
             <hr />
