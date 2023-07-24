@@ -1,0 +1,83 @@
+<!-- https://react.dev/learn/reusing-logic-with-custom-hooks#implement-a-staggering-movement -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link rel="stylesheet" href="styles.css" />
+    <style></style>
+    <title>Implement a staggering movement</title>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <!-- 
+      =========================================================================
+      App.js 
+    -->
+    <script type="module">
+      import { usePointerPosition } from "./usePointerPosition.js";
+      window.usePointerPosition = usePointerPosition;
+    </script>
+
+    <script type="text/babel">
+      function useDelayedValue(value, delay) {
+        const [val, setVal] = React.useState(value);
+
+        React.useEffect(() => {
+          const id = setTimeout(() => {
+            setVal(value);
+          }, delay);
+        }, [value, delay]);
+
+        return val;
+      }
+
+      function App() {
+        const pos1 = usePointerPosition();
+        const pos2 = useDelayedValue(pos1, 100);
+        const pos3 = useDelayedValue(pos2, 200);
+        const pos4 = useDelayedValue(pos3, 100);
+        const pos5 = useDelayedValue(pos3, 50);
+        return (
+          <>
+            <Dot position={pos1} opacity={1} />
+            <Dot position={pos2} opacity={0.8} />
+            <Dot position={pos3} opacity={0.6} />
+            <Dot position={pos4} opacity={0.4} />
+            <Dot position={pos5} opacity={0.2} />
+          </>
+        );
+      }
+
+      function Dot({ position, opacity }) {
+        return (
+          <div
+            style={{
+              position: "absolute",
+              backgroundColor: "pink",
+              borderRadius: "50%",
+              opacity,
+              transform: `translate(${position.x}px, ${position.y}px)`,
+              pointerEvents: "none",
+              left: -20,
+              top: -20,
+              width: 40,
+              height: 40,
+            }}
+          />
+        );
+      }
+      /*
+       * ======================================================================
+       * index.js
+       */
+      ReactDOM.createRoot(document.getElementById("root")).render(
+        <React.StrictMode>
+          <App />
+        </React.StrictMode>
+      );
+    </script>
+  </body>
+</html>
