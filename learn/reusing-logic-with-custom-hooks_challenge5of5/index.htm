@@ -23,8 +23,15 @@
 
     <script type="text/babel">
       function useDelayedValue(value, delay) {
-        // TODO: Implement this Hook
-        return value;
+        const [val, setVal] = React.useState(value);
+
+        React.useEffect(() => {
+          const id = setTimeout(() => {
+            setVal(value);
+          }, delay);
+        }, [value, delay]);
+
+        return val;
       }
 
       function App() {
