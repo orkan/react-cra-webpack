@@ -48,8 +48,9 @@
           return;
         }
 
-        squares[i] = xIsNext ? "X" : "O";
-        onPlay(squares);
+        const nextSquares = squares.slice();
+        nextSquares[i] = xIsNext ? "X" : "O";
+        onPlay(nextSquares);
       }
 
       let status = winner
@@ -79,30 +80,44 @@
     }
 
     let App = function Game() {
-      const [xIsNext, setxIsNext] = useState(!!Math.round(Math.random()));
       const [history, setHistory] = useState([Array(9).fill(null)]);
       const [move, setMove] = useState(0);
 
-      if (!history[move]) {
-        history[move] =
-          0 === move ? Array(9).fill(null) : history[move - 1].slice();
-        setHistory(history);
+      const squares = history[move];
+      const xIsNext = move % 2 === 0;
+
+      function jumpTo(nextMove) {
+        setMove(nextMove);
       }
 
-      function onPlay(nextSquares) {
-        history[move] = nextSquares;
-        setHistory(history); // mutated!
-        setMove(move + 1); // not mutated -> trigers re-render!
-        setxIsNext(!xIsNext);
+      function handlePlay(nextSquares) {
+        const h1 = history.slice(0, move + 1); // slice to last move (included!)
+        const h2 = [...h1, nextSquares]; // append next move
+        setHistory(h2);
+        setMove(move + 1);
       }
+
+      const moves = history.map((item, i) => {
+        return (
+          <li key={i}>
+            <button onClick={() => jumpTo(i)}>
+              Jump to: {i === 0 ? "START" : `move #${i}`}
+            </button>
+          </li>
+        );
+      });
 
       return (
         <div className="game">
           <div className="game-board">
-            <Board xIsNext={xIsNext} squares={history[move]} onPlay={onPlay} />
+            <Board
+              xIsNext={xIsNext}
+              squares={history[move]}
+              onPlay={handlePlay}
+            />
           </div>
           <div className="game-info">
-            <ol>{/*TODO*/}</ol>
+            <ol>{moves}</ol>
           </div>
         </div>
       );
@@ -134,7 +149,7 @@
     const root = createRoot(document.getElementById("root"));
     root.render(
       <StrictMode>
-        <App />
+      <App />
       </StrictMode>
     );
   </script>
