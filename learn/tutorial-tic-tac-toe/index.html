@@ -27,13 +27,16 @@
     import React, { StrictMode, useState } from "react";
     import { createRoot } from "react-dom/client";
 
+    const reversePlayer = !!Math.round(Math.random());
+    console.log('reversePlayer', reversePlayer);
+
     // ========================================================================
     let App = function Game() {
       const [history, setHistory] = useState([Array(9).fill(null)]);
       const [move, setMove] = useState(0);
 
       const squares = history[move];
-      const xIsNext = move % 2 === 0;
+      const xIsNext = reversePlayer ? move % 2 !== 0 : move % 2 === 0;
 
       function jumpTo(nextMove) {
         setMove(nextMove);
