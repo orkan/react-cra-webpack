@@ -3,26 +3,40 @@ import { useState, useEffect } from "react";
 import Form from "react-bootstrap/Form";
 import "./SwitchTheme.css";
 
-/**
- * @link https://codesandbox.io/s/bootstrap-dark-theme-in-react-forked-rjhyj3?file=/src/App.js
+/*
+ * ----------------------------------------------------------------------------
+ * HOOKS:
  */
-const SwitchTheme = ({ isDark = false, onClick }) => {
-  const [checked, setChecked] = useState(isDark);
+function useBSTheme(isDark) {
+  const [dark, setDark] = useState(isDark);
 
   useEffect(() => {
-    setChecked(isDark);
-  }, [isDark]);
+    let theme = "light";
+    if (null === dark) {
+      theme = localStorage.getItem("theme") ?? theme;
+    } else {
+      theme = dark ? "dark" : theme;
+    }
+    document.documentElement.setAttribute("data-bs-theme", theme);
+    localStorage.setItem("theme", theme);
+    setDark("dark" === theme);
+  }, [dark]);
+
+  return [dark, setDark];
+}
+
+/*
+ * ----------------------------------------------------------------------------
+ * COMPONENT:
+ * @link https://codesandbox.io/s/bootstrap-dark-theme-in-react-forked-rjhyj3?file=/src/App.js
+ */
+const SwitchTheme = ({ isChecked = null, onClick }) => {
+  const [checked, setChecked] = useBSTheme(isChecked);
 
   function handleChange(e) {
     setChecked(e.target.checked);
     onClick && onClick(e.target.checked);
   }
-
-  // Possible but {checked} must be specified in props, otherwise react throws warning: uncontroled input
-  // const opts = {};
-  // if("dark" === theme && !checked) {
-  //   opts.checked = true;
-  // }
 
   return (
     <Form>
@@ -33,7 +47,6 @@ const SwitchTheme = ({ isDark = false, onClick }) => {
         label={checked ? "Dark mode" : "Light mode"}
         checked={checked}
         onChange={handleChange}
-        // {...opts}
       />
     </Form>
   );
@@ -41,17 +54,17 @@ const SwitchTheme = ({ isDark = false, onClick }) => {
 
 SwitchTheme.propTypes = {
   /**
-   * Use dark theme?
+   * Set dark theme? Use NULL to read last user choice.
    */
-  isDark: PropTypes.bool,
+  isChecked: PropTypes.bool,
   /**
-   * Optional click handler
+   * Optional click handler.
    */
   onClick: PropTypes.func,
 };
 
 SwitchTheme.defaultProps = {
-  isDark: false,
+  isChecked: undefined,
   onClick: undefined,
 };
 

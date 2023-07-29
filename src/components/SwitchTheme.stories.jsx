@@ -15,19 +15,19 @@ export const Default = {
 
 export const Light = {
   args: {
-    isDark: false,
+    isChecked: false,
   },
 };
 
 export const Dark = {
   args: {
-    isDark: true,
+    isChecked: true,
   },
 };
 
 export const onClickLogger = {
   args: {
-    isDark: true,
+    isChecked: true,
     onClick: (...args) => console.log("onClick, checked:", args[0]),
   },
 };
