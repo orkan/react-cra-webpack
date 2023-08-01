@@ -1,30 +1,29 @@
 import { useState } from "react";
-import logoReact from "./assets/img/logo_react.svg";
-import logoBootstrap from "./assets/img/logo_bootstrap.svg";
-import logoWebpack from "./assets/img/logo_webpack.svg";
+import { Button } from "./stories/Button";
+import SwitchTheme from "./components/SwitchTheme";
 
 import "./App.css";
 import "./scss/bootstrap.scss";
 
-import { Button } from "./stories/Button";
-import SwitchTheme from "./components/SwitchTheme";
+import logoReact from "./assets/img/logo_react-bootstrap.svg";
+import logoBootstrap from "./assets/img/logo_bootstrap.svg";
+import logoWebpack from "./assets/img/logo_webpack.svg";
 
-function App() {
+export default function App() {
   const [count, setCount] = useState(0);
-
   return (
     <div className="d-flex flex-column align-items-center">
       <div className="mb-4 fs-1">
-        <a href="https://reactjs.org">
-          <img alt="React logo" className="logo spin" src={logoReact} />
+        <a href="https://react-bootstrap.netlify.app/">
+          <img alt="React Bootstrap logo" className="logo react spin" src={logoReact} />
         </a>
-        {' + '}
+        {" + "}
         <a href="https://getbootstrap.com">
-          <img alt="Bootstrap logo" className="logo" src={logoBootstrap} />
+          <img alt="Bootstrap logo" className="logo bootstrap" src={logoBootstrap} />
         </a>
-        {' + '}
+        {" + "}
         <a href="https://webpack.js.org">
-          <img alt="Webpack logo" className="logo" src={logoWebpack} />
+          <img alt="Webpack logo" className="logo webpack" src={logoWebpack} />
         </a>
       </div>
 
@@ -44,5 +43,3 @@ function App() {
     </div>
   );
 }
-
-export default App;
